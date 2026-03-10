@@ -115,10 +115,10 @@ function renderCopyBar() {
   const copiedPlan = getCopiedPlan();
   copyBar.hidden = !copiedPlan;
   if (!copiedPlan) return;
-  copyLabel.textContent = `복사됨: ${copiedPlan.title}`;
+  copyLabel.textContent = `복사 중: ${copiedPlan.title}`;
   copyHelp.textContent = state.copyTargetDates.length > 0
     ? `${state.copyTargetDates.length}개 날짜 선택됨`
-    : "캘린더에서 날짜를 여러 개 선택하세요.";
+    : "캘린더에서 날짜를 눌러 여러 개 선택하세요.";
 }
 
 function renderCalendar() {
@@ -421,7 +421,7 @@ function occursOnDate(plan, dateString) {
 function formatRepeatLabel(plan) {
   if (plan.repeatType === "none") return "1회";
   if (plan.repeatType === "daily") return "매일";
-  if (plan.repeatType === "weekly") return `매주 ${WEEKDAY_LABELS[new Date(`${plan.startDate}T00:00:00`).getDay()]}`;
+  if (plan.repeatType === "weekly") return `매주 ${WEEKDAY_LABELS[new Date(`${plan.startDate}T00:00:00`).getDay()]}요일`;
   if (plan.repeatType === "monthly") return `매월 ${new Date(`${plan.startDate}T00:00:00`).getDate()}일`;
   if (plan.repeatType === "interval") return `${Math.max(1, Number(plan.intervalDays) || 1)}일마다`;
   if (plan.repeatType === "quarterly") return "매분기";
