@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Routine Flow Calendar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero">
+      <p class="eyebrow">Routine Flow</p>
+      <h1>반복되는 습관을 캘린더 일정으로 관리하세요.</h1>
+      <p class="hero-copy">날짜 기반 일정, 반복 규칙, 복사 붙여넣기까지 한 화면에서 다루는 루틴 캘린더입니다.</p>
+    </section>
+
+    <section class="workspace">
+      <section class="panel calendar-panel">
+        <div class="calendar-head">
+          <div>
+            <p class="section-kicker">Calendar</p>
+            <h2 id="calendar-title">2026년 3월</h2>
+          </div>
+          <div class="calendar-actions">
+            <button id="prev-month" type="button" class="ghost-button" aria-label="이전 달">이전</button>
+            <button id="today-button" type="button" class="ghost-button">오늘</button>
+            <button id="next-month" type="button" class="ghost-button" aria-label="다음 달">다음</button>
+          </div>
+        </div>
+
+        <div class="weekday-row" aria-hidden="true">
+          <span>일</span>
+          <span>월</span>
+          <span>화</span>
+          <span>수</span>
+          <span>목</span>
+          <span>금</span>
+          <span>토</span>
+        </div>
+
+        <div id="calendar-grid" class="calendar-grid"></div>
+      </section>
+
+      <section class="side-stack">
+        <button id="open-composer" type="button" class="fab-button" aria-label="일정 추가">+</button>
+
+        <section id="copy-bar" class="panel copy-panel" hidden>
+          <p id="copy-label" class="copy-label"></p>
+          <div class="copy-actions">
+            <p id="copy-help" class="copy-help">캘린더에서 날짜를 여러 개 선택하세요.</p>
+            <button id="clear-copy-dates" type="button" class="ghost-button">선택 초기화</button>
+            <button id="paste-copy" type="button" class="ghost-button">선택 날짜에 넣기</button>
+          </div>
+        </section>
+
+        <section id="composer-panel" class="panel composer is-collapsed">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">Planner</p>
+              <h2>일정 등록</h2>
+            </div>
+            <div class="composer-actions">
+              <p>반복 규칙까지 함께 저장됩니다.</p>
+              <button id="close-composer" type="button" class="ghost-button" aria-label="일정 등록 닫기">닫기</button>
+            </div>
+          </div>
+
+          <form id="schedule-form" class="schedule-form">
+            <label>
+              <span>일정 이름</span>
+              <input id="schedule-title" name="title" type="text" maxlength="50" placeholder="예: 헬스장 가기" required>
+            </label>
+
+            <div class="form-row">
+              <label>
+                <span>시작 날짜</span>
+                <input id="schedule-date" name="startDate" type="date" required>
+              </label>
+              <label>
+                <span>카테고리</span>
+                <select id="schedule-category" name="category">
+                  <option value="Health">Health</option>
+                  <option value="Work">Work</option>
+                  <option value="Study">Study</option>
+                  <option value="Life">Life</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              <span>반복 방식</span>
+              <select id="repeat-type" name="repeatType">
+                <option value="none">반복 없음</option>
+                <option value="daily">매일</option>
+                <option value="weekly">매주</option>
+                <option value="monthly">매월</option>
+                <option value="interval">몇 일마다</option>
+                <option value="quarterly">매분기</option>
+              </select>
+            </label>
+
+            <label id="interval-picker" class="interval-picker" hidden>
+              <span>반복 간격</span>
+              <input id="interval-days" name="intervalDays" type="number" min="1" max="365" value="1">
+            </label>
+
+            <button type="submit" class="primary-button">일정 저장</button>
+          </form>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <section id="detail-modal" class="detail-modal" hidden>
+    <div id="detail-backdrop" class="detail-backdrop"></div>
+    <article class="detail-card">
+      <div class="detail-head">
+        <div>
+          <p class="section-kicker">Schedule</p>
+          <h2 id="detail-title">일정 상세</h2>
+        </div>
+        <button id="close-detail" type="button" class="ghost-button" aria-label="상세 닫기">닫기</button>
+      </div>
+      <div class="detail-body">
+        <p id="detail-date" class="detail-line"></p>
+        <p id="detail-repeat" class="detail-line"></p>
+        <p id="detail-category" class="detail-line"></p>
+      </div>
+      <div class="detail-actions">
+        <button id="detail-toggle" type="button" class="ghost-button">완료 처리</button>
+        <button id="detail-edit" type="button" class="ghost-button">수정</button>
+        <button id="detail-copy" type="button" class="ghost-button">복사</button>
+        <button id="detail-delete" type="button" class="danger-button">삭제</button>
+      </div>
+    </article>
+  </section>
+
+  <section id="delete-modal" class="detail-modal" hidden>
+    <div id="delete-backdrop" class="detail-backdrop"></div>
+    <article class="detail-card delete-card">
+      <div class="detail-head">
+        <div>
+          <p class="section-kicker">Delete</p>
+          <h2 id="delete-title">삭제 방식 선택</h2>
+        </div>
+        <button id="close-delete" type="button" class="ghost-button" aria-label="삭제 닫기">닫기</button>
+      </div>
+      <div class="detail-body">
+        <p id="delete-copy" class="detail-line">이번 일정만 삭제할지, 반복 전체를 삭제할지 선택하세요.</p>
+      </div>
+      <div class="detail-actions">
+        <button id="delete-once" type="button" class="ghost-button">이번 일정만</button>
+        <button id="delete-all" type="button" class="danger-button">반복 전체 삭제</button>
+      </div>
+    </article>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
